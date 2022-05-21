@@ -1,24 +1,21 @@
-import fs from 'fs'
+import {CSVFileReader} from "./CSVFileReader";
 
-const matches = fs.readFileSync('football.csv', {
-    encoding: 'utf-8'
-})
-    .split('\n')
-    .map((row: string): string[] => {
-        return row.split(',')
-    })
+
+const reader = new CSVFileReader('football.csv')
+reader.read()
 
 const enum MatchResult {
     HomeWin = "H",
     AwayWin = "A",
-    Draw = "D"
+    Draw = "D",
 }
 
 const mainTeamIndex = 1
 const clientTeamIndex = 2
 const resultIndex = 5
 let manUnitedWins = 0
-matches.forEach(match => {
+
+reader.data.forEach(match => {
     if (match[mainTeamIndex] === 'Man United' && match[resultIndex] === MatchResult.HomeWin) {
         manUnitedWins++
     } else if (match[clientTeamIndex] === 'Man United' && match[resultIndex] === MatchResult.AwayWin) {
@@ -26,4 +23,4 @@ matches.forEach(match => {
     }
 })
 
-console.log(`Man United won ${manUnitedWins} games`)
+console.log(`Man United won ${manUnitedWins} games ${new Date()}`)
